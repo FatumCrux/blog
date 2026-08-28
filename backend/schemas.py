@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 # 创建文章的请求体类型
@@ -36,4 +36,28 @@ class PostOut(BaseModel):
     created_at: datetime
     updated_at: datetime
 # model_config 用于配置 pydantic 的行为，ConfigDict 为存放模型行为开关的字典
+# from_attributes=True: 允许 pydantic 模型从任意对象的属性（attribute）读取数据
     model_config = ConfigDict(from_attributes=True)
+
+
+# 注册请求体：用户创建模型，前端发出创建用户的数据
+# 前端提交的是明文密码
+class UserCreate(BaseModel):
+    username: str = Field(min_length=1, max_length=50)
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=64)
+
+
+# 用户输出模型，后端返回前端的数据，密码不能返回
+class UserOut(BaseModel):
+    id: int
+    username: str
+    email: str
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+# 用户登录模型
+class UserLogin(BaseModel):
+    username: str
+    password: str

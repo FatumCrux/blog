@@ -13,7 +13,7 @@ router = APIRouter(prefix="/posts", tags=["posts"])
 def get_post_or_404(post_id: int, db: Session):
     post = db.query(Post).filter(Post.id == post_id).first()
     if post is None:
-        raise HTTPException(status_code=404, detail="这里没有东西喵~")
+        raise HTTPException(status_code=404, detail="文章不存在")
     return post
 
 # 接口1：创建文章(增)
@@ -73,5 +73,5 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
     post = get_post_or_404(post_id, db)
     db.delete(post)
     db.commit()
-    return {"success": "猫猫已经把这篇文章吃掉了喵~"}
+    return {"message": "删除成功"}
 

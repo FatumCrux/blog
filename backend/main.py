@@ -4,12 +4,14 @@ from db import Base, engine
 import models  # noqa F401：No Quality Assuarance 触发模型登记的副作用，故意留着不删  F401:错误码：import未被使用
 from routers.posts import router as posts_router
 from routers.tags import router as tags_router
+from routers.auth import router as auth_router
 
 
 # 创建 web 应用
 app = FastAPI(title="My Blog")
 app.include_router(posts_router)
 app.include_router(tags_router)
+app.include_router(auth_router)
 
 # 建表：调用 Base.metadata 里的 create_all 方法，通过 engine 建表，
 # 且只会创建不存在的表，若表已经存在则跳过

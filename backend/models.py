@@ -45,3 +45,14 @@ class Tag(Base):
     name = Column(String(50), nullable=False, unique=True)
 
     posts = relationship("Post", secondary=post_tags, back_populates="tags")
+
+
+# User表类，用户注册、登录等功能，感觉不是很必要，但是还是先做吧，个人博客也不太需要其他人来注册
+# 数据库中不储存明文密码，储存密码的哈希值
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, nullable=False)
+    username = Column(String(50), unique=True, nullable=False)
+    password_hash = Column(String(128), nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
