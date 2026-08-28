@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict
 class PostCreate(BaseModel):
     title: str
     content: str
+    tags: list[str] = []  # 前端传标签名列表，默认空，不打标签也能传文章
 
 
 # 更新文章的请求体类型
@@ -16,15 +17,23 @@ class PostUpdate(BaseModel):
     content: str | None = None
 
 
-# 返回给前端的文章数据
+# 标签的输出模型，让文章能带标签
+# Python从上往下执行，TagOut必须在PostOut前面，否则后者执行到的list[TagOut]会报错
+class TagOut(BaseModel):
+    id: int
+    name: str
+    model_config = ConfigDict(from_attributes=True)
+
+
+# 文章的输出模型，返回给前端的文章数据
 # pydantic 默认只读取字典或者另一个 pydantic 对象的数据，接口返回的是 SQLAlchemy 对象
 # from_attributes=True 允许 pydantic 从 SQLAlchemy 对象读取属性
-# model_config 用于配置 pydantic 的行为，ConfigDict 为存放模型行为开关的字典
 class PostOut(BaseModel):
     id: int
     title: str
     content: str
+    tags: list[TagOut] = []
     created_at: datetime
     updated_at: datetime
-
+# model_config 用于配置 pydantic 的行为，ConfigDict 为存放模型行为开关的字典
     model_config = ConfigDict(from_attributes=True)

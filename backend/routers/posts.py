@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from db import get_db
-from models import Post
+from models import Post, Tag
 from schemas import PostCreate, PostOut, PostUpdate
 
 # 使用APIRouter创建路由对象
@@ -25,6 +25,14 @@ def get_post_or_404(post_id: int, db: Session):
 @router.post("/", response_model=PostOut, status_code=201)
 def create_post(post_data: PostCreate, db: Session = Depends(get_db)):  # PostCreate是Pydantic请求模型，负责接受和校验前端传的参数
     post = Post(title=post_data.title, content=post_data.content)  # Post是数据库模型，将请求模型接收的参数存储在数据库中
+    # 上传文章时添加标签，如果数据库中存在同名标签，就用现成的标签对象
+    # 如果不存在同名标签，就新建标签对象并写入数据库
+    for tag_name in post_data.tags:
+        tag = db.query(Tag).filter(Tag.name == tag_name).first()  # 判断标签是否存在并将结果存入tag，可以为None，即不存在
+        if tag is None:
+            tag = Tag(name=tag_name)  # 若不存在则新建Tag实例赋给tag
+            db.add(tag)  # 将tag加入会话
+        post.tags.append(tag)  # 将tag加入文章中
     db.add(post)  # 将数据加入会话
     db.commit()  # 提交事务，写入数据库
     db.refresh(post)  # 刷新对象，获取相应的值(id、创建时间)
@@ -32,8 +40,13 @@ def create_post(post_data: PostCreate, db: Session = Depends(get_db)):  # PostCr
 
 # 接口2：文章列表(查)
 @router.get("/", response_model=list[PostOut])
-def list_posts(db: Session = Depends(get_db)):
-    return db.query(Post).all()
+def list_posts(tag: str | None = None, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    query = db.query(Post)  # 先查询Post表
+    # tag存在，就筛选出包含对应tag的文章
+    if tag:
+        query = query.filter(Post.tags.any(Tag.name == tag))
+    posts = query.offset(skip).limit(limit).all()  # 分页显示，一页10条(默认limit=10)
+    return posts
 
 # 接口3：单篇文章详情(查)
 @router.get("/{post_id}", response_model=PostOut)
