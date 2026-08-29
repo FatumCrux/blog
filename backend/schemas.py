@@ -25,13 +25,20 @@ class TagOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+# 作者信息输出模型，显示每篇文章都会带上作者
+class AuthorOut(BaseModel):
+    id: int
+    username: str
+    model_config = ConfigDict(from_attributes=True)
+
+
 # 文章的输出模型，返回给前端的文章数据
 # pydantic 默认只读取字典或者另一个 pydantic 对象的数据，接口返回的是 SQLAlchemy 对象
 # from_attributes=True 允许 pydantic 从 SQLAlchemy 对象读取属性
 class PostOut(BaseModel):
     id: int
     title: str
-    author_id: int
+    author: AuthorOut
     content: str
     tags: list[TagOut] = []
     created_at: datetime

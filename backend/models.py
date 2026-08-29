@@ -34,6 +34,7 @@ class Post(Base):
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     # 用 tags 通过 post_tags 建立与 Tag 表的双向关系
     tags = relationship("Tag", secondary=post_tags, back_populates="posts")
+    author = relationship("User")
 
 
 # Tags 表类，表名 tags，存放 tag 标签的 id 和名称，

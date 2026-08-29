@@ -8,9 +8,9 @@ from routers.tags import router as tags_router
 
 # 创建 web 应用
 app = FastAPI(title="My Blog")
-app.include_router(posts_router)
-app.include_router(tags_router)
-app.include_router(auth_router)
+app.include_router(posts_router, prefix="/api")
+app.include_router(tags_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
 
 # 建表：调用 Base.metadata 里的 create_all 方法，通过 engine 建表，
 # 且只会创建不存在的表，若表已经存在则跳过
