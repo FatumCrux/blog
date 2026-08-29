@@ -31,12 +31,13 @@ class TagOut(BaseModel):
 class PostOut(BaseModel):
     id: int
     title: str
+    author_id: int
     content: str
     tags: list[TagOut] = []
     created_at: datetime
     updated_at: datetime
-# model_config 用于配置 pydantic 的行为，ConfigDict 为存放模型行为开关的字典
-# from_attributes=True: 允许 pydantic 模型从任意对象的属性（attribute）读取数据
+    # model_config 用于配置 pydantic 的行为，ConfigDict 为存放模型行为开关的字典
+    # from_attributes=True: 允许 pydantic 模型从任意对象的属性（attribute）读取数据
     model_config = ConfigDict(from_attributes=True)
 
 

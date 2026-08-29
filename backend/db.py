@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-
 # 数据库连接串，切换数据库时仅修改该行
 # 通用 url 格式"数据库(协议)://主机/路径，sqlite 无主机，所以直接 3 个/
 DATABASE_URL = "sqlite:///./blog.db"

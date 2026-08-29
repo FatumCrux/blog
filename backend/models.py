@@ -13,7 +13,6 @@ from sqlalchemy.orm import relationship
 
 from db import Base
 
-
 # 多对多关联表，一篇文章可以匹配多个标签，一个标签也可以匹配多篇文章
 # 关联表没有对象，也不需要对象。所以直接实例化，不需要声明为类。但我需要对象，但我也没有对象
 post_tags = Table(
@@ -25,15 +24,15 @@ post_tags = Table(
 
 
 # Post 表类，表名 posts，存放文章的 id、标题、内容、上传与修改时间，
-# 用 tags 通过 post_tags 建立与 Tag 表的双向关系
 class Post(Base):
     __tablename__ = "posts"
     id = Column(Integer, primary_key=True, nullable=False)
     title = Column(String(200), nullable=False)
+    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     content = Column(Text, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-
+    # 用 tags 通过 post_tags 建立与 Tag 表的双向关系
     tags = relationship("Tag", secondary=post_tags, back_populates="posts")
 
 

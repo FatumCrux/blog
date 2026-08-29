@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 
-from db import Base, engine
 import models  # noqa F401：No Quality Assuarance 触发模型登记的副作用，故意留着不删  F401:错误码：import未被使用
+from db import Base, engine
+from routers.auth import router as auth_router
 from routers.posts import router as posts_router
 from routers.tags import router as tags_router
-from routers.auth import router as auth_router
-
 
 # 创建 web 应用
 app = FastAPI(title="My Blog")

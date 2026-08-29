@@ -47,4 +47,3 @@ def user_login(user_data: UserLogin, db: Session = Depends(get_db)):
         # 前端解析时，会在后续每个请求的请求头上携带Bearer + token
         "access_token": token, "token_type": "bearer"
     }
-
