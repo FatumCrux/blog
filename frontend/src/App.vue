@@ -1,85 +1,66 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+  <div class="site">
+    <header class="navbar">
+      <RouterLink to="/" class="brand">
+        <img alt="Darling Dance logo" class="logo" src="/img/DarlingDance.png" />
+        <span>FatumCrux</span>
+      </RouterLink>
+      <nav class="nav-links">
+        <RouterLink to="/">首页</RouterLink>
       </nav>
-    </div>
-  </header>
+    </header>
 
-  <RouterView />
+    <main class="content">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.navbar {
+  display: flex;  /* flex左右布局 */
+  justify-content: space-between;  /* logo靠左，链接靠右 */
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #ccdeff;  /* 下边框，分隔导航栏和内容区 */
+  background: #ccccff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;  /* logo和文字之间的间距 */
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.nav-links a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: #333;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+/* 高亮当前路由链接 */
+.nav-links a.router-link-exact-active {
+  font-weight: bold;
+  color: #4b0a76;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
+.content {
+  max-width: 800px;
+  margin: 2rem auto;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>
