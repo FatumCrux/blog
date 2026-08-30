@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 import models  # noqa F401：No Quality Assuarance 触发模型登记的副作用，故意留着不删  F401:错误码：import未被使用
 from db import Base, engine
@@ -8,6 +9,14 @@ from routers.tags import router as tags_router
 
 # 创建 web 应用
 app = FastAPI(title="My Blog")
+
+# 添加CORS(跨域资源共享)中间件
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 允许所有来源，注意这里等买了域名之后要改成自己的域名
+    allow_methods=["*"],  # 允许所有方法(get/post/put/delete)
+    allow_headers=["*"],  # 允许所有请求头，比如Authorization
+)
 app.include_router(posts_router, prefix="/api")
 app.include_router(tags_router, prefix="/api")
 app.include_router(auth_router, prefix="/api")
