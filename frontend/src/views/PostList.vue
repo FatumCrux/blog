@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { formatDate } from '@/utils/format.js'
 
 // 响应式数据：数据变化，页面自动刷新
 // 存放文章列表，初始为空数组
@@ -22,8 +23,11 @@ onMounted(async () => {
     <h1>文章列表</h1>
     <!-- 使用 v-for 循环渲染每篇文章，给每篇文章一个article元素 -->
     <article v-for="post in posts" :key="post.id" class="post-item">
-      <h2>{{ post.title }}</h2>
+      <router-link :to="`/post/${post.id}`">
+        <h2>{{ post.title }}</h2>
+      </router-link>
       <p>By {{ post.author.username }}</p>
+      <p>{{ formatDate(post.created_at) }}</p>
       <p>{{ post.content }}</p>
       <!-- 使用 v-for 渲染标签数组 -->
       <span v-for="tag in post.tags" :key="tag.id" class="tag">{{ tag.name }}</span>
