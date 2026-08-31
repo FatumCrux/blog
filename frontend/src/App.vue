@@ -11,6 +11,7 @@ import { RouterLink, RouterView } from 'vue-router'
       </RouterLink>
       <nav class="nav-links">
         <RouterLink to="/">首页</RouterLink>
+        <RouterLink to="/login">登录</RouterLink>
       </nav>
     </header>
 

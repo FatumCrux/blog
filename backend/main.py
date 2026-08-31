@@ -11,6 +11,8 @@ from routers.tags import router as tags_router
 app = FastAPI(title="My Blog")
 
 # 添加CORS(跨域资源共享)中间件
+# 前端从文章列表点进文章详情时，浏览器从5173端口(前端)跨域请求到8000端口(后端)
+# 启用CORS，否则请求会被拦截
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 允许所有来源，注意这里等买了域名之后要改成自己的域名

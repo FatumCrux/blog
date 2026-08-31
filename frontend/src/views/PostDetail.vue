@@ -10,8 +10,8 @@ const post = ref({})
 
 onMounted(async () => {
     // 发送请求获取文章详情
-    const response = await fetch(`/api/posts/${postId}`)
-    post.value = await response.json()
+    const response = await fetch(`/api/posts/${postId}`)  // fetch 是浏览器提供的 API，用于向服务器发送请求，返回一个 Promise 对象
+    post.value = await response.json()  // 将响应体解析为 JSON 格式的数据并存入post.value中，触发页面刷新
 })
 </script>
 
