@@ -1,5 +1,22 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { useRouter, RouterLink, RouterView } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
+
+const router = useRouter()
+const auth = useAuthStore()  // 引入authStore，用于管理登录状态
+
+function logout() {
+    auth.logout()  // 调用auth store的logout方法，清除token并更新登录状态
+    router.push('/')  // 登出后跳转到首页
+}
+
+function goToWrite() {
+  if (!auth.token) {
+    router.push({ path: '/login', query: { msg: '请先登录再上传文章' } })  // 如果未登录，跳转到登录页面
+    return
+  }
+  router.push('/write')  // 如果已登录，跳转到写作页面
+}
 </script>
 
 <template>
@@ -7,11 +24,16 @@ import { RouterLink, RouterView } from 'vue-router'
     <header class="navbar">
       <RouterLink to="/" class="brand">
         <img alt="Darling Dance logo" class="logo" src="/img/DarlingDance.png" />
-        <span>FatumCrux</span>
+        <span>FatumCrux的小站</span>
       </RouterLink>
       <nav class="nav-links">
         <RouterLink to="/">首页</RouterLink>
-        <RouterLink to="/login">登录</RouterLink>
+        <RouterLink v-if="!auth.token" to="/login">登录</RouterLink>
+        <a v-if="auth.token" href="#" @click.prevent="logout">登出</a>
+        <!-- <RouterLink v-if="!auth.token" to="/register">注册</RouterLink>
+        <RouterLink v-if="auth.token" to="/profile">个人中心</RouterLink>
+        <RouterLink v-if="auth.token" to="/settings">设置</RouterLink> -->
+        <a href="#" @click.prevent="goToWrite">写作</a>
       </nav>
     </header>
 
