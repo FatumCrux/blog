@@ -5,6 +5,7 @@ from db import get_db
 from models import User
 from schemas import UserCreate, UserOut, UserLogin
 from security import hash_password, verify_password, create_access_token
+from dependencies import get_current_user
 
 # 使用APIRouter创建路由对象
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -47,3 +48,9 @@ def user_login(user_data: UserLogin, db: Session = Depends(get_db)):
         # 前端解析时，会在后续每个请求的请求头上携带Bearer + token
         "access_token": token, "token_type": "bearer"
     }
+
+
+#显示当前用户
+@router.get("/me", response_model=UserOut, status_code=200)
+def user_me(current_user: User = Depends(get_current_user)):
+    return current_user

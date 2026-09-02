@@ -80,6 +80,14 @@ def update_post(post_id: int,
         post.title = post_data.title
     if post_data.content is not None:
         post.content = post_data.content
+    if post_data.tags is not None:
+        post.tags.clear()
+        for tag_name in post_data.tags:
+            tag = db.query(Tag).filter(Tag.name == tag_name).first()
+            if tag is None:
+                tag = Tag(name=tag_name)
+                db.add(tag)
+            post.tags.append(tag)
     db.commit()
     db.refresh(post)
     return post

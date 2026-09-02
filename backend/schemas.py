@@ -15,6 +15,7 @@ class PostCreate(BaseModel):
 class PostUpdate(BaseModel):
     title: str | None = None
     content: str | None = None
+    tags: list[str] | None = None
 
 
 # 标签的输出模型，让文章能带标签
